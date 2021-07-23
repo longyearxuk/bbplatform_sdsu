@@ -44,6 +44,7 @@ BBdir='/test_0714/BBout_0714';
 DATAdir= [EVEpath '/BBin_0519'];
 PLTdir = [EVEpath '/test_0714/figures'];
 mkdir (PLTdir);      % generate the directory for plots
+DDIR=[DATAdir '/Obs_rcc_0603/SA'];
 
 do_rlz=1;		% realization number
 
@@ -77,7 +78,6 @@ for jj=EVENTsdo
     load('ridgecrest_station_freq_range.mat');
     Tmin = 1./Station_Freq_Range(:,2);
     Tmax = 1./Station_Freq_Range(:,1);
-    DDIR=[DATAdir '/Obs_rcc_0603/SA'];
         
     nsta=length(STATs);
     
