@@ -12,7 +12,22 @@ originated: 2021/03/29 by Ke Xu (kxu4143@sdsu.edu)
 - 2021/07/23: added into github and inserted some new comments
 ```
 
-## 1/ file structure: [Codes_bbp]
+## 1/ Running tips
+- 1.1. Start a simulation  
+
+  - Preparations: install gfortran compiler
+
+  - Check and compile the bbplatform codes:  
+```
+cd BB_code_multi0503
+csh compile.sh
+cp BBtoolbox-newrl-rupspeed-new-randomiseed.exe ~/YOUR/RUNNING/DIRECTORY/.
+```
+
+  - 
+
+
+## 2/ file structure: [bbplatform_sdsu]
 - 1.1. BB_code_multi0503/.  
 The main codes for BB calculations, with new features added for correlations, rupture speed and multi-segment subfaults by Nan Wang (nwang@sdsu.edu).
 Version: 2021-05-03
@@ -20,9 +35,13 @@ Version: 2021-05-03
 
   - (1) ./CorrelationMatrixGenerator/.  
 Contains Matlab codes to generate input correlation files, used for correlation feature, files including:  
+
     * SDSU_BBP_CorrelationMatrixGenerator.m: main code;  
+
     * nearestSPD.m: a function to find the nearest Symmetric Positive Definite matrix, used in correlation generator;  
+
     * B_EAS_2020.mat and empirical_coeff.mat: input coefficients used in correlation generator in Matlab;  
+
     * *.bin: generated matrix files, Ksp1, Ksp2, Ksp3 for spatial correlations, and Kinf for inter-freq correlations.  
 
   - (2) f90 code files updated for correlations, rupspeed, and multi-segments:  
