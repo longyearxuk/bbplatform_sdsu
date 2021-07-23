@@ -10,6 +10,7 @@ originated: 2021/03/29 by Ke Xu (kxu4143@sdsu.edu)
   - 2021/03/29: generated file and started in ‘file structure’ part
   - 2021/07/08: modified for changed file structures
   - 2021/07/23: added into github and inserted some new comments
+  - 2021/07/23: added running tips, realization explanation, and some small tools
   ```
 
 ## 1/ Running tips
@@ -105,6 +106,16 @@ originated: 2021/03/29 by Ke Xu (kxu4143@sdsu.edu)
 
     * other param/data files remain unchanged.  
       (.bbpar, bbtstations.dat, vmod.txt, observation data)
+
+- 1.3. Notes on parameter tests
+
+  - (1) Changes in 'Vrup' (rupture speed)
+    [2.1-(2): composition.f90: 670-680] Vrup_ratio determination  
+    [2.1-(2): composition.f90: 809-816] Vrup GP corrections  
+
+  - (2) Changes in 'fac' (scaling factor)
+    [2.1-(2): module_bbtoolbox.f90: 383-385]
+
 
 ## 2/ file structure: [bbplatform_sdsu]
 - 2.1. BB_code_multi0503/.  
@@ -274,7 +285,15 @@ Contains Matlab codes to generate input correlation files, used for correlation 
     * EVENT_station_freq_range.mat:  
       the frequency ranges for all stations to be calculated & compared
 
-  - (3) Former Matlab scripts with other functions (not currently used though)  
+  - (3) Other tools useful for bbtoolbox 
+    (may be moved to other locations)  
+
+    * ch_fname.sh: change multiple filenames for input data  
+
+    * LF_cm2m.py: change LF data format for bbtoolbox  
+
+
+  - (4) Former Matlab scripts with other functions (not currently used though)  
 
     * compare_test.m:  
       compare results from different settings and output folders;
