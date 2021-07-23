@@ -6,11 +6,11 @@ originated: 2021/03/29 by Ke Xu (kxu4143@sdsu.edu)
 ```
 
 ### changelog:
-```
-- 2021/03/29: generated file and started in ‘file structure’ part
-- 2021/07/08: modified for changed file structures
-- 2021/07/23: added into github and inserted some new comments
-```
+  ```
+  - 2021/03/29: generated file and started in ‘file structure’ part
+  - 2021/07/08: modified for changed file structures
+  - 2021/07/23: added into github and inserted some new comments
+  ```
 
 ## 1/ Running tips
 - 1.1. Start a simulation  
@@ -18,35 +18,36 @@ originated: 2021/03/29 by Ke Xu (kxu4143@sdsu.edu)
   - (1) Preparations: install gfortran compiler
 
   - (2) Check and compile the bbplatform codes:  
-```
-cd BB_code_multi0503
-csh compile.sh
-cp BBtoolbox-newrl-rupspeed-new-randomiseed.exe ~/YOUR/RUNNING/DIRECTORY/.
-```
+    ```
+    cd BB_code_multi0503
+    csh compile.sh
+    cp BBtoolbox-newrl-rupspeed-new-randomiseed.exe ~/YOUR/RUNNING/DIRECTORY/.
+    ```
 
   - (3) Check and modify the input/output paths
     * [in 2.3-(1): testDATE.bbpar]
-```
-- /* OUTPUT DIRECTORY */
-- /* VELOCITY MODEL FILE */
-- /* STATIONS FILE */
-- /* 2ND STATIONS FILE */ (*.dat, optional)
-- /* EXTENDED FAULT-MODEL FILE */
-- /* SCATTERING PARAMETERS FILE */
-- /* SRF FILE */
-- /* CORRELATION FILES */ (*.bin, optional)
-```
+    ```
+    - /* OUTPUT DIRECTORY */
+    - /* VELOCITY MODEL FILE */
+    - /* STATIONS FILE */
+    - /* 2ND STATIONS FILE */ (*.dat, optional)
+    - /* EXTENDED FAULT-MODEL FILE */
+    - /* SCATTERING PARAMETERS FILE */
+    - /* SRF FILE */
+    - /* CORRELATION FILES */ (*.bin, optional)
+    ```
+    
     * [in 2.2-(2): /* STATIONS FILE */]
-```
-- /* INPUT DIRECTORY */ (for input LF results)
-```
+    ```
+    - /* INPUT DIRECTORY */ (for input LF results)
+    ```
 
   - (4) Run code and provide the .bbpar file
-```
-cd  ~/YOUR/RUNNING/DIRECTORY/.
-./BBtoolbox-newrl-rupspeed-new-randomiseed.exe
-[keyboard input: testDATE.bbpar]
-```
+    ```
+    cd  ~/YOUR/RUNNING/DIRECTORY/.
+    ./BBtoolbox-newrl-rupspeed-new-randomiseed.exe
+    [keyboard input: testDATE.bbpar]
+    ```
 
   - (5) Post-processing: observations
     * Modify and run BBs_obs_conv_NE.m & BBs_obs_rd50_kxu.m
@@ -54,48 +55,50 @@ cd  ~/YOUR/RUNNING/DIRECTORY/.
 
   - (6) Post-processing: comparisons
     * Modify and run BBs_hyb_rd50_kxu.m
-```
-cd mtools
-# transfer hyb results into rd50
-# modify:
-# EVENTsdo, METHODsdo (current simulation)
-# EVEpath, BBdir (paths to output files)
-# rls, rlz (start & number of realizations)
-matlab -nodisplay
-BBs_hyb_rd50_kxu
-```
+    ```
+    cd mtools
+    # transfer hyb results into rd50
+    # modify:
+    # EVENTsdo, METHODsdo (current simulation)
+    # EVEpath, BBdir (paths to output files)
+    # rls, rlz (start & number of realizations)
+    matlab -nodisplay
+    BBs_hyb_rd50_kxu
+    ```
 
     * Modify and run BBs_GOFplot_kxu.m
-```
-cd mtools
-# plot GOF for rd50 with observations
-# modify:
-# EVENTs, METHODs (current simulation)
-# EVEpath, BBdir (paths to output files)
-# DATAdir, DDIR (paths to observation data)
-# PLTdir (path to output figures)
-# do_rlz (total number of realizations)
-#
-# !! Check 90:95 for the correct input file formats !!
-#
-matlab -nodisplay
-BBs_GOFplot_kxu
-```
+    ```
+    cd mtools
+    # plot GOF for rd50 with observations
+    # modify:
+    # EVENTs, METHODs (current simulation)
+    # EVEpath, BBdir (paths to output files)
+    # DATAdir, DDIR (paths to observation data)
+    # PLTdir (path to output figures)
+    # do_rlz (total number of realizations)
+    #
+    # !! Check 90:95 for the correct input file formats !!
+    #
+    matlab -nodisplay
+    BBs_GOFplot_kxu
+    ```
 
 - 1.2. Notes on realizations
 
-  - (1) Changes made for realizations:
-    * iseed & cseed [in 2.2-(1) scattering.dat]
-    * seed value in SRC files [not included in bbplatform]
-```
-# SRC files are used by GP rupture generator & LF simulations
-# SRC files determine:
-# /* rake */ in .bbpar file
-# rupture speed and slip distributions in SRF file
-# difference in extened_fault file
-# difference in LF simulations
-```
-    * other param/data files remain unchanged
+  - (1) Changes made for realizations:  
+    * iseed & cseed [in 2.2-(1) scattering.dat].  
+
+    * seed value in SRC files [not included in bbplatform].  
+    ```
+    # SRC files are used by GP rupture generator & LF simulations
+    # SRC files determine:
+    # /* rake */ in .bbpar file
+    # rupture speed and slip distributions in SRF file
+    # difference in extened_fault file
+    # difference in LF simulations
+    ```
+
+    * other param/data files remain unchanged.  
       (.bbpar, bbtstations.dat, vmod.txt, observation data)
 
 ## 2/ file structure: [bbplatform_sdsu]
