@@ -42,6 +42,11 @@ originated: 2021/03/29 by Ke Xu (kxu4143@sdsu.edu)
     - /* INPUT DIRECTORY */ (for input LF results)
     ```
 
+    * [in 2.2-(3): change input LF formats]
+    ```
+    python3 LF_cm2m.py
+    ```
+
   - (4) Run code and provide the .bbpar file
     ```
     cd  ~/YOUR/RUNNING/DIRECTORY/.

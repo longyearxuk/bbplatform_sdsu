@@ -39,12 +39,17 @@ METHODs={'sdsu/'};
 EVENTsdo=1;
 METHODsdo=1;
 
-EVEpath='../Ridgecrest-c_xuk';
-BBdir='/test_0714/BBout_0714';
-DATAdir= [EVEpath '/BBin_0519'];
-PLTdir = [EVEpath '/test_0714/figures'];
+%EVEpath='../Ridgecrest-c_xuk';
+%BBdir='/test_0714/BBout_0714';
+%DATAdir= [EVEpath '/BBin_0519'];
+%PLTdir = [EVEpath '/test_0714/figures'];
+%DDIR=[DATAdir '/Obs_rcc_0603/SA'];
+EVEpath	= '../sngl_rlz/ridgecrest19c';
+BBdir	= [EVEpath '/BBout_0723'];
+DATAdir	= [EVEpath];
+PLTdir 	= [EVEpath '/figures']
+DDIR	= [DATAdir '/obs_data'];
 mkdir (PLTdir);      % generate the directory for plots
-DDIR=[DATAdir '/Obs_rcc_0603/SA'];
 
 do_rlz=1;		% realization number
 
@@ -87,11 +92,11 @@ for jj=EVENTsdo
     ave_dgmSA=zeros(1,leng);
     ave_sgmSA=zeros(1,leng);
     
-    % choose 'LOC' for 2-column obs data 
+    % 'LOC' for 2-column ; 'BBP' for 4-column obs data 
     for nn=1:nsta
         STAT=STATs{nn};
         dfilename=[DDIR '/'  STAT '.rotd50'];
-        [dgmSA(nn,1:leng)] = read_rd50_2(dfilename,'LOC');
+        [dgmSA(nn,1:leng)] = read_rd50_2(dfilename,'BBP');
     end % end of data section
     
 	% read synthetics at all stations in each realization

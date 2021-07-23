@@ -32,8 +32,10 @@ METHODs={'csm/';'ucsb/';'exsim/';'gp/';'sdsu/'};
 EVENTsdo=[11];
 METHODsdo=5;
 
-EVEpath='../Ridgecrest-c_xuk';
-BBdir='/test_0714/BBout_0714';
+%EVEpath='../Ridgecrest-c_xuk';
+%BBdir='/test_0714/BBout_0714';
+EVEpath = '../sngl_rlz/ridgecrest19c';
+BBdir   = '/BBout_0723';
 
 rls=0;		% start of realization num
 rlz=1;		% number of realizations
