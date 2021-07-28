@@ -28,11 +28,11 @@ clear all;
 close all;
 set(0,'defaultaxesfontsize',13);
 
-TITLES = ('Northridge: fac-test');
-printname = 'Northridge_fac_test';
+TITLES = ('Iwate: fac-test');
+printname = 'Iwate_fac_test';
 
 % don't change these two 
-EVENTs={'northr/'};
+EVENTs={'iwate/'};
 METHODs={'sdsu/'};
 
 % change these instead
@@ -44,7 +44,7 @@ METHODsdo=1;
 %DATAdir= [EVEpath '/BBin_0519'];
 %PLTdir = [EVEpath '/test_0714/figures'];
 %DDIR=[DATAdir '/Obs_rcc_0603/SA'];
-EVEpath	= '../sngl_rlz/northridge';
+EVEpath	= '../sngl_rlz/iwate';
 BBdir	= '/BBout_0727';
 DATAdir	= [EVEpath];
 PLTdir 	= [EVEpath '/figures']
@@ -69,16 +69,17 @@ tic
 for jj=EVENTsdo
     EVENT=EVENTs{jj};
     EVENTname=EVENT(1:length(EVENT)-1);
-    STATs={ '28001-5419' '28002-32076' '28003-43158' '28004-APL' ...
-             '28005-AVM' '28006-CCA' '28007-CCC' '28008-CGO' '28009-CLC' ...
-             '28010-CWC' '28011-DAW' '28012-DTP' '28013-EDW2' '28014-FDR' ...
-             '28015-FUR' '28016-GSC' '28017-HAR' '28018-HYS' '28019-ISA' ...
-             '28020-JRC2' '28021-LDR' '28022-LMR2' '28023-LRL' '28024-MPM' ...
-             '28025-PUT' '28026-Q0068' '28027-RRX' '28028-SBB2' ...
-             '28029-SHO' '28030-SLA' '28031-SPG2' '28032-SRT' '28033-TEH' ...
-             '28034-TEJ' '28035-TOW2' '28036-TPO' '28037-WAS2' '28038-WBM' ...
-             '28039-WBS' '28040-WCS2' '28041-WHF' '28042-WMF' '28043-WNM' ...
-             '28044-WOR' '28045-WRC2' '28046-WRV2' '28047-WVP2'};
+    STATs = {'18001-IWTH25'    '18011-55203'    '18021-YMT010'    '18031-AOM028' ...
+        '18002-IWTH24'    '18012-MYGH04'    '18022-IWTH15'    '18032-AKTH09' ...
+        '18003-IWTH26'    '18013-55441'    '18023-IWT016'    '18033-FKSH09' ...
+        '18004-44B71'    '18014-IWTH22'    '18024-YMT016'    '18034-FKS019' ...
+        '18005-MYGH02'    '18015-54012'    '18025-AKTH18'    '18035-57059' ...
+        '18006-48A61'    '18016-IWTH05'    '18026-AKT014'    '18036-AOM029' ...
+        '18007-MYG005'    '18017-IWTH04'    '18027-4CAB1'    '18037-FKSH02' ...
+        '18008-IWT010'    '18018-55446'    '18028-IWT021'    '18038-FKSH03' ...
+        '18009-AKT023'    '18019-IWT015'    '18029-IWT013'    '18039-AOMH10' ...
+        '18010-AKTH04'    '18020-55465'    '18030-AKTH02'    '18040-FKSH18'}
+    %
 
     load('ridgecrest_station_freq_range.mat');
     Tmin = 1./Station_Freq_Range(:,2);
@@ -120,7 +121,7 @@ for jj=EVENTsdo
             sgmSA=zeros(nsta,leng);
             for ss=1:nsta
                 STAT=STATs{ss};
-                sfilename=[EVEpath BBdir '_' realnum '/SA/' STAT '.rd50'];
+                sfilename=[EVEpath BBdir '_' realnum '/SA/' STAT '.rotd50'];
                 if ss==1;
                     sfilename
                 end

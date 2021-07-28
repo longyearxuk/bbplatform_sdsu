@@ -83,7 +83,7 @@ originated: 2021/03/29 by Ke Xu (kxu4143@sdsu.edu)
     # PLTdir (path to output figures)
     # do_rlz (total number of realizations)
     #
-    # !! Check 90:95 for the correct input file formats !!
+    # !! Check 90:95 for the correct input file names and formats !!
     #
     matlab -nodisplay
     BBs_GOFplot_kxu
