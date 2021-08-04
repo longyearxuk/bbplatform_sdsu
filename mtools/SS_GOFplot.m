@@ -29,7 +29,7 @@ close all;
 set(0,'defaultaxesfontsize',13);
 
 TITLES = ('Sansimeon: fac-test');
-printname = 'sansimeon_fac_test';
+printname = 'sansimeon_fac_0805';
 
 % don't change these two 
 EVENTs={'sansimeon/'};
@@ -45,7 +45,7 @@ METHODsdo=1;
 %PLTdir = [EVEpath '/test_0714/figures'];
 %DDIR=[DATAdir '/Obs_rcc_0603/SA'];
 EVEpath	= '../sngl_rlz/sansimeon';
-BBdir	= '/BBout_0728';
+BBdir	= '/BBout_0805';
 DATAdir	= [EVEpath];
 PLTdir 	= [EVEpath '/figures']
 DDIR	= [DATAdir '/obs_data'];
