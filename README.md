@@ -51,6 +51,8 @@ originated: 2021/03/29 by Ke Xu (kxu4143@sdsu.edu)
   - (4) Run code and provide the .bbpar file
     ```
     cd  ~/YOUR/RUNNING/DIRECTORY/.
+    ulimit -s unlimited
+    # to avoid limit for ray-tracing (segmentation fault)#
     ./BBtoolbox-newrl-rupspeed-new-randomiseed.exe
     [keyboard input: testDATE.bbpar]
     ```
