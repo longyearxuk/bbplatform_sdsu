@@ -68,6 +68,7 @@ originated: 2021/03/29 by Ke Xu (kxu4143@sdsu.edu)
     # EVENTsdo, METHODsdo (current simulation)
     # EVEpath, BBdir (paths to output files)
     # rls, rlz (start & number of realizations)
+    # STATs (all the observation stations)
     matlab -nodisplay
     BBs_hyb_rd50_kxu
     ```
@@ -82,6 +83,7 @@ originated: 2021/03/29 by Ke Xu (kxu4143@sdsu.edu)
     # DATAdir, DDIR (paths to observation data)
     # PLTdir (path to output figures)
     # do_rlz (total number of realizations)
+    # STATs (all the observation stations)
     #
     # !! Check 90:95 for the correct input file names and formats !!
     #
