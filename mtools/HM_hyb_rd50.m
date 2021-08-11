@@ -37,8 +37,8 @@ METHODsdo=5;
 EVEpath = '../sngl_rlz/hectormine';
 BBdir   = '/BBout_0728';
 
-rls=0;		% start of realization num
-rlz=1;		% number of realizations
+rls=1;		% start of realization num
+rlz=2;		% number of realizations
 
 tic
 for jj=EVENTsdo

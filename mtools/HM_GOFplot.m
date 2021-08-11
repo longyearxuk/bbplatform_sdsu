@@ -51,7 +51,7 @@ PLTdir 	= [EVEpath '/figures']
 DDIR	= [DATAdir '/obs_data'];
 mkdir (PLTdir);      % generate the directory for plots
 
-do_rlz=1;		% realization number
+do_rlz=3;		% realization number
 
 T =  [0.010 0.011 0.012 0.013 0.015 0.017 0.020 0.022 0.025 ...
       0.029 0.032 0.035 0.040 0.045 0.050 0.055 0.060 0.065 ...

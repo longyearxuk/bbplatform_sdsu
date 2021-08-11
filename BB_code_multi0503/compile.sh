@@ -7,6 +7,6 @@ set MODULE = 'module_bbtoolbox_0328_lenupdate0421_corr_rupspeed.f90 module_inter
 
 gcc -w -c ray3DJHfor.c
 
-gfortran $MODULE $CODE -o BBtoolbox-newrl-multi.exe
+gfortran -g $MODULE $CODE -o BBtoolbox-newrl-multi.exe
 
 rm -f *.mod *.o

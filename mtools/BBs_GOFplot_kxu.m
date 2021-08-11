@@ -23,6 +23,10 @@
 % 07/01/2021:
 %    re-arranged the path strings EVEpath & BBdir
 %    re-arranged the PLTdir and pname to save pics together
+% 08/10/2021:
+%    added set(gcf, 'position') command to change the figure size
+%    fixed the subplot(211) command to gca for single plots
+
 
 clear all;
 close all;
@@ -44,14 +48,14 @@ METHODsdo=1;
 %DATAdir= [EVEpath '/BBin_0519'];
 %PLTdir = [EVEpath '/test_0714/figures'];
 %DDIR=[DATAdir '/Obs_rcc_0603/SA'];
-EVEpath	= '../sngl_rlz/northridge';
-BBdir	= '/BBout_0727';
+EVEpath	= '../sngl_rlz/ridgecrest19c';
+BBdir	= '/BBout_0728';
 DATAdir	= [EVEpath];
 PLTdir 	= [EVEpath '/figures']
 DDIR	= [DATAdir '/obs_data'];
 mkdir (PLTdir);      % generate the directory for plots
 
-do_rlz=1;		% realization number
+do_rlz=3;		% realization number
 
 T =  [0.010 0.011 0.012 0.013 0.015 0.017 0.020 0.022 0.025 ...
       0.029 0.032 0.035 0.040 0.045 0.050 0.055 0.060 0.065 ...
@@ -120,7 +124,7 @@ for jj=EVENTsdo
             sgmSA=zeros(nsta,leng);
             for ss=1:nsta
                 STAT=STATs{ss};
-                sfilename=[EVEpath BBdir '_' realnum '/SA/' STAT '.rd50'];
+                sfilename=[EVEpath BBdir '_' realnum '/SA/' STAT '.rotd50'];
                 if ss==1;
                     sfilename
                 end
@@ -202,11 +206,12 @@ for jj=EVENTsdo
             end
         
             figure;
+            set(gcf,'position',[10,10,510,185]);
             set(gcf,'color','white');
             maxX = 10.0;
             minX = 0.01;
 
-            s1 = subplot(211);
+            s1 = gca;
             a = resMD+resSD; a2 = resMD+res90;
             b = resMD-resSD; b2 = resMD-res90;
 

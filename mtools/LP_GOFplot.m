@@ -28,8 +28,8 @@ clear all;
 close all;
 set(0,'defaultaxesfontsize',13);
 
-TITLES = ('Loma prieta: fac-test');
-printname = 'lomaprieta_fac_test';
+TITLES = ('Loma prieta: Q-test');
+printname = 'lomaprieta_fd5_Q';
 
 % don't change these two 
 EVENTs={'lomap/'};
@@ -39,19 +39,14 @@ METHODs={'sdsu/'};
 EVENTsdo=1;
 METHODsdo=1;
 
-%EVEpath='../Ridgecrest-c_xuk';
-%BBdir='/test_0714/BBout_0714';
-%DATAdir= [EVEpath '/BBin_0519'];
-%PLTdir = [EVEpath '/test_0714/figures'];
-%DDIR=[DATAdir '/Obs_rcc_0603/SA'];
 EVEpath	= '../sngl_rlz/lomaprieta';
-BBdir	= '/BBout_0728';
+BBdir	= '/BBout_0810';
 DATAdir	= [EVEpath];
 PLTdir 	= [EVEpath '/figures']
 DDIR	= [DATAdir '/obs_data'];
 mkdir (PLTdir);      % generate the directory for plots
 
-do_rlz=1;		% realization number
+do_rlz=3;		% realization number
 
 T =  [0.010 0.011 0.012 0.013 0.015 0.017 0.020 0.022 0.025 ...
       0.029 0.032 0.035 0.040 0.045 0.050 0.055 0.060 0.065 ...

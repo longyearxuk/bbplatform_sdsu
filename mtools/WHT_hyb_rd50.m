@@ -32,13 +32,11 @@ METHODs={'csm/';'ucsb/';'exsim/';'gp/';'sdsu/'};
 EVENTsdo=[2];
 METHODsdo=5;
 
-%EVEpath='../Ridgecrest-c_xuk';
-%BBdir='/test_0714/BBout_0714';
 EVEpath = '../sngl_rlz/whittier';
-BBdir   = '/BBout_0728';
+BBdir   = '/BBout_0810';
 
 rls=0;		% start of realization num
-rlz=1;		% number of realizations
+rlz=3;		% number of realizations
 
 tic
 for jj=EVENTsdo
