@@ -39,11 +39,6 @@ METHODs={'sdsu/'};
 EVENTsdo=1;
 METHODsdo=1;
 
-%EVEpath='../Ridgecrest-c_xuk';
-%BBdir='/test_0714/BBout_0714';
-%DATAdir= [EVEpath '/BBin_0519'];
-%PLTdir = [EVEpath '/test_0714/figures'];
-%DDIR=[DATAdir '/Obs_rcc_0603/SA'];
 EVEpath	= '../sngl_rlz/chuetsu-failed';
 BBdir	= '/BBout_0727';
 DATAdir	= [EVEpath];
@@ -82,7 +77,7 @@ for jj=EVENTsdo
         '16013-65037'  '16026-NIG015'  '16039-TCGH14' ... 
         '16014-65036'  '16027-70031'  '16040-GIF006' ... 
         '16015-65013'  '16028-GNMH09' ... 
-        '16016-65011'  '16029-NGN005'}
+        '16016-65011'  '16029-NGN005'};
     %
     load('ridgecrest_station_freq_range.mat');
     Tmin = 1./Station_Freq_Range(:,2);
@@ -206,11 +201,12 @@ for jj=EVENTsdo
             end
         
             figure;
+            set(gcf,'position',[10,10,510,185])
             set(gcf,'color','white');
             maxX = 10.0;
             minX = 0.01;
 
-            s1 = subplot(211);
+            s1 = gca;
             a = resMD+resSD; a2 = resMD+res90;
             b = resMD-resSD; b2 = resMD-res90;
 

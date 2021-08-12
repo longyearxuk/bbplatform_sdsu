@@ -33,10 +33,10 @@ EVENTsdo=[2];
 METHODsdo=5;
 
 EVEpath = '../sngl_rlz/whittier';
-BBdir   = '/BBout_0810';
+BBdir   = '/BBout_0811';
 
 rls=0;		% start of realization num
-rlz=3;		% number of realizations
+rlz=2;		% number of realizations
 
 tic
 for jj=EVENTsdo

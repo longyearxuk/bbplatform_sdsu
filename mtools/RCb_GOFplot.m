@@ -28,7 +28,7 @@ clear all;
 close all;
 set(0,'defaultaxesfontsize',13);
 
-TITLES = ('Ridgecrest-b: fac-test');
+TITLES = ('Ridgecrest-b: Q&fdec-test');
 printname = 'ridgecrest-b_fac_test';
 
 % don't change these two 
@@ -46,7 +46,7 @@ PLTdir 	= [EVEpath '/figures']
 DDIR	= [DATAdir '/obs_data'];
 mkdir (PLTdir);      % generate the directory for plots
 
-do_rlz=3;		% realization number
+do_rlz=4;		% realization number
 
 T =  [0.010 0.011 0.012 0.013 0.015 0.017 0.020 0.022 0.025 ...
       0.029 0.032 0.035 0.040 0.045 0.050 0.055 0.060 0.065 ...
@@ -208,7 +208,8 @@ for jj=EVENTsdo
             maxX = 10.0;
             minX = 0.01;
 
-            s1 = subplot(211);
+            set(gcf,'position',[10,10,510,185])
+            s1 = gca;
             a = resMD+resSD; a2 = resMD+res90;
             b = resMD-resSD; b2 = resMD-res90;
 

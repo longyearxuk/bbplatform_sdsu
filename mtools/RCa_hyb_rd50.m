@@ -35,8 +35,8 @@ METHODsdo=5;
 EVEpath = '../sngl_rlz/ridgecrest19a';
 BBdir   = '/BBout_0728';
 
-rls=1;		% start of realization num
-rlz=2;		% number of realizations
+rls=3;		% start of realization num
+rlz=1;		% number of realizations
 
 tic
 for jj=EVENTsdo

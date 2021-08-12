@@ -203,11 +203,12 @@ for jj=EVENTsdo
             end
         
             figure;
+            set(gcf,'position',[10,10,510,185])
             set(gcf,'color','white');
             maxX = 10.0;
             minX = 0.01;
 
-            s1 = subplot(211);
+            s1 = gca;
             a = resMD+resSD; a2 = resMD+res90;
             b = resMD-resSD; b2 = resMD-res90;
 

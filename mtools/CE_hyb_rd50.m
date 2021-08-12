@@ -32,8 +32,6 @@ METHODs={'csm/';'ucsb/';'exsim/';'gp/';'sdsu/'};
 EVENTsdo=[9];
 METHODsdo=5;
 
-%EVEpath='../Ridgecrest-c_xuk';
-%BBdir='/test_0714/BBout_0714';
 EVEpath = '../sngl_rlz/chuetsu-failed';
 BBdir   = '/BBout_0727';
 
@@ -56,7 +54,7 @@ for jj=EVENTsdo
         '16013-65037'  '16026-NIG015'  '16039-TCGH14' ... 
         '16014-65036'  '16027-70031'  '16040-GIF006' ... 
         '16015-65013'  '16028-GNMH09' ... 
-        '16016-65011'  '16029-NGN005'}
+        '16016-65011'  '16029-NGN005'};
 %     
     for kk=METHODsdo
         METHOD=METHODs{kk};
