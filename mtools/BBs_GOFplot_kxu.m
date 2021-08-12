@@ -32,8 +32,8 @@ clear all;
 close all;
 set(0,'defaultaxesfontsize',13);
 
-TITLES = ('Northridge: fac-test');
-printname = 'Northridge_fac_test';
+TITLES = ('Ridgecrest: original');
+printname = 'Ridgecrest_rd50_test';
 
 % don't change these two 
 EVENTs={'northr/'};
@@ -49,13 +49,13 @@ METHODsdo=1;
 %PLTdir = [EVEpath '/test_0714/figures'];
 %DDIR=[DATAdir '/Obs_rcc_0603/SA'];
 EVEpath	= '../sngl_rlz/ridgecrest19c';
-BBdir	= '/BBout_0728';
+BBdir	= '/BBout_0812';
 DATAdir	= [EVEpath];
 PLTdir 	= [EVEpath '/figures']
 DDIR	= [DATAdir '/obs_data'];
 mkdir (PLTdir);      % generate the directory for plots
 
-do_rlz=3;		% realization number
+do_rlz=1;		% realization number
 
 T =  [0.010 0.011 0.012 0.013 0.015 0.017 0.020 0.022 0.025 ...
       0.029 0.032 0.035 0.040 0.045 0.050 0.055 0.060 0.065 ...
@@ -128,7 +128,7 @@ for jj=EVENTsdo
                 if ss==1;
                     sfilename
                 end
-                [sgmSA(ss,1:leng)] = read_rd50_2(sfilename,'LOC');
+                [sgmSA(ss,1:leng)] = read_rd50_2(sfilename,'BBP');
 
                 % compute residuals
                 resSA(:,ss) = log(dgmSA(ss,:)./sgmSA(ss,:));
@@ -206,12 +206,11 @@ for jj=EVENTsdo
             end
         
             figure;
-            set(gcf,'position',[10,10,510,185]);
+            set(gcf,'position',[0,0,500,210]);
             set(gcf,'color','white');
             maxX = 10.0;
             minX = 0.01;
 
-            s1 = gca;
             a = resMD+resSD; a2 = resMD+res90;
             b = resMD-resSD; b2 = resMD-res90;
 
@@ -224,7 +223,8 @@ for jj=EVENTsdo
             ll=legend('1-\sigma interval','90 % C.I.','median','BBs');
             set(ll,'FontS',10,'box','off', 'FontW', 'bo');
 
-            set(s1,'LineW',2,'XTick',[0.01 0.05 0.1 0.2 0.3 0.5 1 1.5 2 3 4 5 7.5 10],...
+            set(gca,'Position', [0.08, 0.2, 0.88, 0.65]);
+            set(gca,'LineW',2,'XTick',[0.01 0.05 0.1 0.2 0.3 0.5 1 1.5 2 3 4 5 7.5 10],...
               'XTicklabel',{'0.01' '0.05' '0.1' '0.2' '0.3' '0.5' '1' '1.5' '2' '3' '4' '5' '7.5' '10'},...
               'YTick',[-2.5 -2.0 -1.5 -1 -.5 0 .5 1 1.5 2.0 2.5],...
               'YTickLabel',{'-2.5' '-2.0' '-1.5' '-1' '-.5' '0' '.5' '1' '1.5' '2.0' '2.5'},...

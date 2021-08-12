@@ -1,9 +1,10 @@
 !     ------------------------------------------------------------------
 !
-!      rotD50.f
-!      Computes RotD50 using pairs of orthogonal horizontal components
+!      rotD100.f
+!      Computes RotD50 and RotD100 using pairs of orthogonal horizontal components
 !      Code developed by Norm Abrahamson, optimized in September 2012 to run faster
 !      QA/QC and some clean-up for distribution by Christine Goulet
+!      Modified in 9/14 by Scott Callaghan to calculate RotD100 also
 !     ------------------------------------------------------------------
 !      Input provided in filein:
 !             -  Interp: mode of interpolation for small dt 
@@ -21,29 +22,28 @@
 !     ------------------------------------------------------------------
 
       program Calc_RotD50
-      parameter (MAXPTS = 1000000)
+      parameter (MAXPTS = 2000000)
 
-      character*80 fileacc1, fileacc2 
-      character*80 filein, fileout_rd50, fileout_psa5
+      character*80 fileacc1, fileacc2, filein, fileout_rd100
       integer npts1, npts2, npts, npair, nhead, iFlag
-      real dt1, dt2, dt, acc1(MAXPTS)
-      real acc2(MAXPTS), acc1_0(MAXPTS), acc2_0(MAXPTS)
+      real dt1, dt2, dt, acc1(MAXPTS), acc2(MAXPTS), acc1_0(MAXPTS), acc2_0(MAXPTS)
+      real dt10
       real x0(MAXPTS), y0(MAXPTS), u(MAXPTS), y2(MAXPTS)
       real rspTH1(MAXPTS), rspTH2(MAXPTS), rsp1(MAXPTS), rsp2(MAXPTS)
       real x(MAXPTS), y(MAXPTS), rsp_Period(63), famp15(3)
-      real rotangle, w(200), sa(1000), workArray(1000), rotD50(3,200)
-      real  psa5E(200), psa5N(200)
+      real rotangle, w(200), sa(1000), workArray(1000), rotD50(3,200), rotD100(3,200), psa5E(200), psa5N(200)
+      integer rD100ang(3,200), rD50ang(3,200)
+      real saUnsort(1000)
       real damping
       complex cu1(MAXPTS)
-    
-      data RSP_Period 
-     + / 0.010, 0.011, 0.012, 0.013, 0.015, 0.017, 0.020, 0.022, 0.025, 
-     +   0.029, 0.032, 0.035, 0.040, 0.045, 0.050, 0.055, 0.060, 0.065, 
-     +   0.075, 0.085, 0.100, 0.110, 0.120, 0.130, 0.150, 0.170, 0.200, 
-     +   0.220, 0.240, 0.260, 0.280, 0.300, 0.350, 0.400, 0.450, 0.500, 
-     +   0.550, 0.600, 0.650, 0.750, 0.850, 1.000, 1.100, 1.200, 1.300, 
-     +   1.500, 1.700, 2.000, 2.200, 2.400, 2.600, 2.800, 3.000, 3.500,
-     +   4.000, 4.400, 5.000, 5.500, 6.000, 6.500, 7.500, 8.500, 10.000/
+
+      data RSP_Period / 0.010, 0.011, 0.012, 0.013, 0.015, 0.017, 0.020, 0.022, 0.025, 0.029, 
+     1               0.032, 0.035, 0.040, 0.045, 0.050, 0.055, 0.060, 0.065, 0.075, 0.085, 
+     2               0.100, 0.110, 0.120, 0.130, 0.150, 0.170, 0.200, 0.220, 0.240, 0.260, 
+     3               0.280, 0.300, 0.350, 0.400, 0.450, 0.500, 0.550, 0.600, 0.650, 0.750, 
+     4               0.850, 1.000, 1.100, 1.200, 1.300, 1.500, 1.700, 2.000, 2.200, 2.400, 
+     5               2.600, 2.800, 3.000, 3.500, 4.000, 4.400, 5.000, 5.500, 6.000, 6.500, 
+     6               7.500, 8.500, 10.000 /	
 
       nFreq = 63
       damping = 0.05
@@ -55,7 +55,7 @@
       enddo
 
 !     Read in the input filename filein 
-      filein = "rotd50_inp.cfg"
+      filein = "rotd100_inp.cfg"
 !     Uncomment below to make interactive instead
 !     write (*,*) 'Enter the input filename.'
 !     read (*,*) filein
@@ -66,8 +66,7 @@
 !     read (*,*) iFlag
       iFlag = 0
       if ( iFlag .eq. 1 ) then
-        write (*,'( 2x,'' enter times (sec) of 
-     +                     first and last points to write out'')')
+        write (*,'( 2x,'' enter times (sec) of first and last points to write out'')')
         read (*,*) time1, time2
       endif
 
@@ -88,7 +87,7 @@
 !    Uncomment below for screen output
 !        write (*,'( a70)') fileacc1
         open (32,file=fileacc1,status='old')
-        do i=1,nhead
+        do i=1,nhead-1
           read (32,*)
         enddo
         read (32,*) npts1, dt1
@@ -104,13 +103,10 @@
 !    Uncomment below for screen output
 !        write (*,'( a70)') fileacc2
         open (33,file=fileacc2,status='old')
-        do i=1,nhead
+        do i=1,nhead-1
           read (33,*)
         enddo
         read (33,*) npts2, dt2
-!        if ( npts2 .gt. 20000) npts2=20000
-        if ( npts2 .gt. 2000000) npts2=2000000
-        print*,'npts2 = ',npts2
         if (npts2 .gt. MAXPTS) then
           write (*,'( 2x,''NPTS is too large: '',i10)') npts
           stop 99
@@ -170,10 +166,8 @@
 
 !         Time domain cubic spline interpolation
           elseif (jInterp .eq. 3 ) then
-            call InterpSpline 
-     +         (acc1, dt, npts, dt10, npts10, NN, y2, x0, y0, u, MAXPTS)
-            call InterpSpline 
-     +         (acc2, dt, npts, dt10, npts10, NN, y2, x0, y0, u, MAXPTS)
+            call InterpSpline (acc1, dt, npts, dt10, npts10, NN, y2, x0, y0, u, MAXPTS )
+            call InterpSpline (acc2, dt, npts, dt10, npts10, NN, y2, x0, y0, u, MAXPTS )
             dt10 = dt / NN
 !            write (*,'(2x,''out of spline'')')
 !             write (*,'( 5e15.6)') (acc1(k) ,k=33600,33620)
@@ -233,21 +227,35 @@
             call Calc_Sa ( y, saY, npts1 )
             sa(j) = saX
             sa(j+90) = SaY
+            saUnsort(j) = sa(j)
+            saUnsort(j+90) = sa(j+90)
           enddo      
 
 !         Get the as-recorded PSa
           psa5E(iFreq) = sa(1)
           psa5N(iFreq) = sa(91)
 
-!         Sort the Sa array to find the median value.
+!         Sort the Sa array to find rotD100
           n1 = 180
           call SORT(Sa,WorkArray,N1)
+          rotD100(jInterp,iFreq) = Sa(180)
           rotD50(jInterp,iFreq) = ( Sa(90) + Sa(91) ) /2.
+
+!         Find the corresponding angle
+          do i=1,180
+           if ( rotD100(jInterp,iFreq) .eq. saUnsort(i) ) then
+            rD100ang(jInterp,iFreq) = i
+           endif
+           if ( rotD50(jInterp,iFreq) .eq. saUnsort(i) ) then
+            rD50ang(jInterp,iFreq) = i
+           endif
+          enddo
          enddo
 
 c        Find the Famp1.5 (assumes order of freq are high to low)
          do iFreq=2,nFreq 
-           shape1 = rotD50(jInterp,iFreq)/rotD50(jInterp,1)
+           shape1 = rotD100(jInterp,iFreq)/rotD100(jInterp,1)
+
            if ( shape1 .ge. 1.5 ) then
              famp15(jInterp) = 1./rsp_period(iFreq)
              goto 105
@@ -256,36 +264,33 @@ c        Find the Famp1.5 (assumes order of freq are high to low)
   105    continue
 
 !       Open output files for writing
-        read (30,'( a80)') fileout_rd50
-        read (30,'( a80)') fileout_psa5
-        open (40,file=fileout_rd50,status='new')
-        open (41,file=fileout_psa5,status='new')
+        read (30,'( a80)') fileout_rd100
+        open (40,file=fileout_rd100,status='replace')
 
-!       Write RotD50 and Psa5 files
-        write (40,'(''#'', 2x,''RotD50'')')
+!       Write RotD100, RotD50 and Psa5 file
+        write (40,'(''#'', 2x, ''Psa5_N'', x, ''Psa5_E'', x, ''RotD50'', x, ''RotD100'')')
         write (40,'(''#'', 2x, a80)') fileacc1
         write (40,'(''#'', 2x, a80)') fileacc2
         write (40,'(''#'', 2x, i5, f10.4)') nFreq, damping
-        write (41,'(''#'', 2x, ''Psa5_E'', x, ''Psa5_N'')')
-        write (41,'(''#'', 2x, a80)') fileacc1
-        write (41,'(''#'', 2x, a80)') fileacc2
-        write (41,'(''#'', 2x, i5, f10.4)') nFreq, damping
         do iFreq=1,nFreq
-!            write (40,'( 2f10.4)'i)
-            write (40,'( 2f10.4)')
-     +             rsp_period(iFreq), rotD50(jInterp,iFreq)
-            write (41,'( 3f10.4)') 
-     +             rsp_period(iFreq), psa5E(iFreq), psa5N(iFreq)
+           write (40,'(f10.4, 1x, e10.5, 1x, e10.5, 1x, e10.5, 1x, e10.5)') rsp_period(iFreq),psa5N(iFreq),psa5E(iFreq),rotD50(jInterp,iFreq),rotD100(jInterp,iFreq)
+!          write (40,'(f10.4,1x,e10.5,1x,e10.5,1x,e10.5,1x,i3)') rsp_period(iFreq),psa5N(iFreq),psa5E(iFreq),rotD100(jInterp,iFreq),rD100ang(jInterp,iFreq)
         enddo
+!        write (40,'(''#'', 2x, ''Psa5_N'', x, ''Psa5_E'', x,''RotD50'')')
+!        write (40,'(''#'', 2x, a80)') fileacc1
+!        write (40,'(''#'', 2x, a80)') fileacc2
+!        write (40,'(''#'', 2x, i5, f10.4)') nFreq, damping
+!        do iFreq=1,nFreq
+!         write (40,'(f10.4,1x,e10.5,1x,e10.5,1x,e10.5,1x,i3)') rsp_period(iFreq),psa5N(iFreq),psa5E(iFreq),rotD50(jInterp,iFreq),rD50ang(jInterp,iFreq)
+!        enddo
         close (40)
-        close (41)
 
  100    continue
       enddo
 
       close (30)
 
-      stop
+!      stop
       end
 
 ! ---------------------------------------------------------------------
@@ -329,8 +334,7 @@ c        Find the Famp1.5 (assumes order of freq are high to low)
 
 ! ---------------------------------------------------------------------
 
-      subroutine InterpSpline 
-     +     (acc1, dt, npts, dt10, npts10, NN, y2, x0, y0, u, MAXPTS )
+      subroutine InterpSpline (acc1, dt, npts, dt10, npts10, NN, y2, x0, y0, u, MAXPTS )
 
       real acc1(MAXPTS)
       real y2(MAXPTS), x0(MAXPTS), y0(MAXPTS), u(MAXPTS)

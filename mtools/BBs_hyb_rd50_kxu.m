@@ -35,10 +35,10 @@ METHODsdo=5;
 %EVEpath='../Ridgecrest-c_xuk';
 %BBdir='/test_0714/BBout_0714';
 EVEpath = '../sngl_rlz/ridgecrest19c';
-BBdir   = '/BBout_0728';
+BBdir   = '/BBout_0812';
 
 rls=0;		% start of realization num
-rlz=3;		% number of realizations
+rlz=1;		% number of realizations
 
 tic
 for jj=EVENTsdo
@@ -76,7 +76,7 @@ for jj=EVENTsdo
                 STAT=STATs{ss};
 
                 % input LF velocity files (simplified)
-                VELpath=[EVEpath BBdir '_' realnum '/' 'BB.' STAT '.hyb' ]
+                VELpath=[EVEpath BBdir '_' realnum '/' 'BB.' STAT '.hyb' ];
 
                 % output acceleration files (simplified)
                 THpath=[EVEpath BBdir '_' realnum  '/' STAT ];
@@ -120,12 +120,13 @@ for jj=EVENTsdo
                     fidC = fopen(FNAME,'w');
                     fprintf(fidC, '%d %s\n', 2, 'Interp');
                     fprintf(fidC, '%d %s\n', length(STATs), 'Npairs');
-                    fprintf(fidC, '%d %s\n', 5, 'Nhead');
+%                    fprintf(fidC,'%d %s\n', 5, 'Nhead');
+                    fprintf(fidC, '%d %s\n', 6, 'Nhead');
                 end
                 fprintf(fidC, '%s/%s_E.acc\n', INDIR, STAT);
                 fprintf(fidC, '%s/%s_N.acc\n', INDIR, STAT);
                 fprintf(fidC, '%s.rotd50\n', STAT);
-                fprintf(fidC, '%s.psa5\n', STAT);
+%                fprintf(fidC, '%s.psa5\n', STAT);
             end
 
             fclose(fidC);
@@ -134,7 +135,8 @@ for jj=EVENTsdo
             display 'DONE create rotd50_inp.cfg'
             
             % copy RotD50Fast* under SA/
-            RDname = 'Rot_CalcRsp_20120919/RotD50Fast';
+%            RDname = 'Rot_CalcRsp_20120919/RotD50Fast';
+            RDname = 'Rot_CalcRsp_UCB/RotD50Fast';
             copyfile (RDname, SAdir);
             
             % run RotD50Fast*
