@@ -11,7 +11,42 @@ originated: 2021/03/29 by Ke Xu (kxu4143@sdsu.edu)
   - 2021/07/08: modified for changed file structures
   - 2021/07/23: added into github and inserted some new comments
   - 2021/07/23: added running tips, realization explanation, and some small tools
+  - 2021/08/21: added change logs to rd50 calc & mfiles
   ```
+
+## 0/ Package change log
+- 0.1/ New tests on different parameters:
+  - [updated 08/06] try changing params:
+    kappa, Q, fdec, (afac, bfac for Japan)
+  - [updated 08/09] test for different fdec 0.4&0.6 
+    [Events: CH, HM, LDS, LP, NPS, PF, RC*3, SS] 
+  - [updated 08/09] current problems: 
+    for events NPS, RC's and PF, 
+    SA increase with lower fdec, which is not expected... 
+    [possible reason] different Q equations?
+  - [updated 08/10] rerun the fdec tests for 3 event 
+    (RCc, NR, WHT) 
+    and tried new tests with fdec=0.5 and chaging Q's 
+  - [updated 08/10] test for Q = 100, 125 and fdec = 0.5
+    for events: LP (N.Cal), CH, NR, WHT (LA), LDS, NPS(Mjv)
+  - [updated 08/10] modified BBs_GOFplot for page sizes 
+    apply this size-change to all plotting mfiles
+  - [updated 08/11] test for Q = 300 and fdec = 0.4,0.2 
+    for events: LP (N.Cal), CH, NR, WHT (LA), RC*3(SSNvd), HM(SSNvd)
+  - [updated 08/12] renewed Rotd50 package (UCB in bbp)
+    changed hyb_rd50 and GOFplot according to new rd50 
+    calculation codes, and modified plotting options. 
+  - [updated 08/12] rearranged mfiles
+    moved all event-specific mfiles into ./mfiles_evespec
+
+- 0.2/ Ray-tracing memory overflow: 
+  - tried the given command but doesn't work: 
+    ```
+    ulimit -s unlimited
+    ulimit -u unlimited
+    ```
+  - it seems that the computer memory is not enough for raytracing (>12M grids in 3D matrix)
+  - need to try with CARC server
 
 ## 1/ Running tips
 - 1.1. Start a simulation  
