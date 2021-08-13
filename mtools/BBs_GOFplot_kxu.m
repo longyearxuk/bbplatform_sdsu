@@ -43,11 +43,6 @@ METHODs={'sdsu/'};
 EVENTsdo=1;
 METHODsdo=1;
 
-%EVEpath='../Ridgecrest-c_xuk';
-%BBdir='/test_0714/BBout_0714';
-%DATAdir= [EVEpath '/BBin_0519'];
-%PLTdir = [EVEpath '/test_0714/figures'];
-%DDIR=[DATAdir '/Obs_rcc_0603/SA'];
 EVEpath	= '../sngl_rlz/ridgecrest19c';
 BBdir	= '/BBout_0812';
 DATAdir	= [EVEpath];

@@ -32,8 +32,6 @@ METHODs={'csm/';'ucsb/';'exsim/';'gp/';'sdsu/'};
 EVENTsdo=[6];
 METHODsdo=5;
 
-%EVEpath='../Ridgecrest-c_xuk';
-%BBdir='/test_0714/BBout_0714';
 EVEpath = '../sngl_rlz/ridgecrest19c';
 BBdir   = '/BBout_0812';
 
