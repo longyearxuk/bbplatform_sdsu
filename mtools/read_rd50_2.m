@@ -1,6 +1,6 @@
 % read rd50 at a station
 %
-% imput
+% input
 %   fname: filename
 % output
 %   SAs: rotD50

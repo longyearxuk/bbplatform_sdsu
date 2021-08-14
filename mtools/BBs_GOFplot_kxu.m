@@ -46,7 +46,7 @@ METHODsdo=1;
 EVEpath	= '../sngl_rlz/ridgecrest19c';
 BBdir	= '/BBout_0812';
 DATAdir	= [EVEpath];
-PLTdir 	= [EVEpath '/figures']
+PLTdir 	= [EVEpath '/figures'];
 DDIR	= [DATAdir '/obs_data'];
 mkdir (PLTdir);      % generate the directory for plots
 
@@ -174,6 +174,9 @@ for jj=EVENTsdo
             axis([0.01 10 10^-3 10^0]);
             hold off;
             pname = [PLTdir '/SA-' printname '-' realnum];
+
+            disp(pname);
+
             %print('-dpdf', pname);
             print('-dpng', pname);
         

@@ -1,11 +1,3 @@
-% the same as change_BBs_unit_vel2acc.m
-% for 1 realization
-% change BB.X.hyb [m/s] to acc [g] for RotD50 computation.
-% copy RotD50Fast for SOBBouts_V163 (working directory)
-% and compute rotD50 in SOBBouts_V163/SA/.
-%
-% need to change directory name from SOBBouts_V163.
-%
 % [Modifications - by kxu4143]
 % 06/04/2021: added Ridgecrest and changed some details:
 %    EVENTsdo = [11]
@@ -17,6 +9,9 @@
 % 07/01/2021:
 %    rearranged the path strings EVEpath & BBdir
 %    added rls to start from non-zero realizations
+% 08/12/2021:
+%    changed the input files and rotd50 calculations
+%    used UCB codes in bbp instead
 
 clear all;
 % close all;
