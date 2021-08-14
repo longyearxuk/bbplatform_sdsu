@@ -22,6 +22,8 @@
 % 08/13/2021:
 %    added 2-input feature and calculate the ratios
 %    cleared the unused features and read STATs from file
+% 08/14/2021:
+%    rearrange the calculation structure for clearer referance
 
 clear all;
 close all;
@@ -29,35 +31,35 @@ set(0,'defaultaxesfontsize',13);
 
 % --------------------------------------- %   
 % stem names and I/O paths
-EVENT	= 'Northridge';
-RLZdir	= '/BBout_0811';	% path to compared rlzs
-BSdir	= '/BBout_0728_rlz_00';	% path to baseline rlz
+EVENT	= 'Ridgecrestc';
+RLZdir	= '/BBout_0728';	% path to compared rlzs
 %
-EVEpath	= '../sngl_rlz/northridge'
-TITLES = [EVENT ': Ratios from Old Params'];
-printname = [EVENT '_ratio_f4q1']
+EVEpath	= '../sngl_rlz/ridgecrest19c';
+%fSTAT = 'bbtstations_ridgecrest_c_v20_08_1.dat';
 %
-rlzs = 0;		% rlz start number
-rlzc = 1;		% rlz counts for comparison
+DATAdir	= [EVEpath];
+PLTdir 	= [EVEpath '/figures'];
+DDIR	= [DATAdir '/obs_data'];
+TITLES = [EVENT ': Ratios'];
+printname = [EVENT '_param_ratio'];
+%
+rlzs = 1;		% rlz start number
+rlzc = 3;		% rlz counts for comparison
 
 % --------------------------------------- %   
 tic
 
-% initiate paths
-
-fSTAT = 'station.list';
-DATAdir	= [EVEpath];
-PLTdir 	= [EVEpath '/figures'];
-mkdir (PLTdir);     	% generate the directory for plots
-
 % load station properties
 
+fSTAT = 'station.list';
 hSTAT = 13; cSTAT = 3;	% headlines and columns in STAT file
 STATs = read_stats([EVEpath '/' fSTAT], hSTAT, cSTAT);
 nsta=length(STATs);
+
 load('ridgecrest_station_freq_range.mat');
 Tmin = 1./Station_Freq_Range(:,2);
 Tmax = 1./Station_Freq_Range(:,1);
+mkdir (PLTdir);     	% generate the directory for plots
 
 % load psa properties (63 periods)
 
@@ -71,14 +73,14 @@ T =  [0.010 0.011 0.012 0.013 0.015 0.017 0.020 0.022 0.025 ...
 T = T';
 leng = length(T);
 
-% read baseline data    
+% read observation data    
 % 'LOC' for 2-column ; 'BBP' for 4-column obs data 
 
-bgmSA=zeros(nsta,leng);
+dgmSA=zeros(nsta,leng);
 for nn=1:nsta
   STAT=STATs{nn};
-  bfilename=[EVEpath BSdir '/SA/' STAT '.rotd50'];
-  [bgmSA(nn,1:leng)] = read_rd50_2(bfilename,'LOC');
+  dfilename=[DDIR '/'  STAT '.rd50'];
+  [dgmSA(nn,1:leng)] = read_rd50_2(dfilename,'BBP');
 end % end of data section
     
 % --------------------------------------- %   
@@ -103,7 +105,7 @@ for ii = rlzs : rlzs+rlzc-1
     [sgmSA(ss,1:leng)] = read_rd50_2(sfilename,'LOC');
 
     % compute residuals
-    resSA(:,ss) = log(bgmSA(ss,:)./sgmSA(ss,:));
+    resSA(:,ss) = log(dgmSA(ss,:)./sgmSA(ss,:));
     
   end
 
@@ -121,7 +123,7 @@ for ii = rlzs : rlzs+rlzc-1
       if (T(mm) > Tmax(ss)) || (T(mm) < Tmin(ss))
         resSA(mm,ss)=0;
         sgmSA(ss,mm)=1;
-        bgmSA(ss,mm)=1;
+        dgmSA(ss,mm)=1;
         nsta_inSA(mm,ss)=0;
       end
     end
@@ -132,12 +134,12 @@ for ii = rlzs : rlzs+rlzc-1
 % calculate average SA at each period
 
   resMD = zeros(leng,1);
-  ave_bgmSA=ones(1,leng);
+  ave_dgmSA=ones(1,leng);
   ave_sgmSA=ones(1,leng);
   for mm=1:leng
     if Tmax_nsta(mm) > 0
       resMD(mm) = sum(resSA(mm,:))/Tmax_nsta(mm);
-      ave_bgmSA(mm)=exp(sum(log(bgmSA(:,mm)))/Tmax_nsta(mm));
+      ave_dgmSA(mm)=exp(sum(log(dgmSA(:,mm)))/Tmax_nsta(mm));
       ave_sgmSA(mm)=exp(sum(log(sgmSA(:,mm)))/Tmax_nsta(mm));
     end
   end
@@ -169,7 +171,7 @@ for ii = rlzs : rlzs+rlzc-1
 % plot SAs for each realization
 
   figure;
-  loglog(T,ave_bgmSA,'k','LineWidth',2, 'DisplayName', 'Data'); hold on;
+  loglog(T,ave_dgmSA,'k','LineWidth',2, 'DisplayName', 'Data'); hold on;
   loglog(T,ave_sgmSA,'r','LineWidth',2, 'DisplayName', 'BBs');
   legend;    
   title(TITLES);
@@ -177,6 +179,7 @@ for ii = rlzs : rlzs+rlzc-1
   axis([0.01 10 10^-3 10^0]);
   hold off;
   pname = [PLTdir '/SA-' printname '-' realnum];
+  %print('-dpdf', pname);
   print('-dpng', pname);
 
 % --------------------------------------- %
@@ -192,9 +195,9 @@ for ii = rlzs : rlzs+rlzc-1
   pp2 = get(pp,'parent'); set(pp2,'Xscale','log');
   hold on; box on;
   patch([(T)' fliplr((T'))],[c90_ur' fliplr(c90_lr')],[0.5 0.5 0.5]);
-  plot((T),resMD,'r-','LineW',2);
-  plot((T),zeros(size(T)),'g','LineW',2); % dashed line on y=0
-  ll=legend('1-\sigma intv','90% C. intv','old param','new param');
+  plot((T),resMD,'k-','LineW',2);
+  plot((T),zeros(size(T)),'r','LineW',2); % dashed line on y=0
+  ll=legend('1-\sigma interval','90 % C.I.','median','BBs');
   set(ll,'FontS',10,'box','off', 'FontW', 'bo');
 
   set(gca,'Position', [0.08, 0.2, 0.88, 0.65]);
@@ -203,7 +206,7 @@ for ii = rlzs : rlzs+rlzc-1
     'YTick',[-2.5 -2.0 -1.5 -1 -.5 0 .5 1 1.5 2.0 2.5],...
     'YTickLabel',{'-2.5' '-2.0' '-1.5' '-1' '-.5' '0' '.5' '1' '1.5' '2.0' '2.5'},...
     'Fontsize',11);
-  xlabel('Period [s]'); ylabel('ln(oldp/newp)','Fontsize',10,'FontW','bo');
+  xlabel('Period [s]'); ylabel('ln(obs/sim)','Fontsize',10,'FontW','bo');
   text(minX+0.01, -1.25,'RotD50','Fontsize',12,'FontW','bo');
   title(TITLES);
   axis([minX maxX -1.8 1.8]);
@@ -211,6 +214,7 @@ for ii = rlzs : rlzs+rlzc-1
   hold off
 
   pname = [PLTdir '/GOF-' printname '-' realnum];
+  %print('-dpdf', pname);
   print('-dpng', pname);
 
 % --------------------------------------- %
