@@ -38,6 +38,8 @@ originated: 2021/03/29 by Ke Xu (kxu4143@sdsu.edu)
     calculation codes, and modified plotting options. 
   - [updated 08/12] rearranged mfiles
     moved all event-specific mfiles into ./mfiles_evespec
+  - [updated 08/14] generated new mfiles
+    read station lists from bbtstations files, and added mfiles to plot ratios of different rlzs
 
 - 0.2/ Ray-tracing memory overflow: 
   - tried the given command but doesn't work: 
@@ -308,13 +310,19 @@ Contains Matlab codes to generate input correlation files, used for correlation 
     * BBs_GOFplot_kxu.m:  
       Draw GOF and PSA plots to compare simulated and observed data.
 
+    * BBs_RTplot_kxu.m:  
+      Draw GOF and PSA plots to compare different realizations.
+
   - (2) Functions, subroutines and parameters used for these calculations:  
 
     * ./Rot_CalcRsp_20120919/:  
       Fortran codes to calculate RotD50 from acc time series, the compiled program used in 1.4(1) Matlab scripts;
 
     * read_rd50_2.m:  
-      read RotD50 data from file with specific format
+      read RotD50 data from file with specific format (BBP: 2clmn, LOC: 1clmn)
+
+    * read_stats.m
+      read station names from bbtstations files
 
     * calculate_BBs_in_g.m:  
       convert original data into acc time series in unit [g];
