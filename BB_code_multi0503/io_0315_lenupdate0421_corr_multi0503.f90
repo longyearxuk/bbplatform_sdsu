@@ -386,7 +386,7 @@ open(1,file=trim(stat_file),status='old',iostat=ierr)
 if (ierr /= 0) call error_handling(1,trim(stat_file),'RAYTRACING_INPUT (io.f90)')
 
 ! read format and file extensions
-read(1,*); read(1,*); read(1,*); read(1,*); read(1,'(a90)') lf_in_dir 
+read(1,*); read(1,*); read(1,*); read(1,*); read(1,'(a256)') lf_in_dir 
 read(1,*); read(1,*)
 read(1,*) lf_kind_flag                                                
 read(1,*); read(1,*)
@@ -449,7 +449,7 @@ if (modality_flag == 0) then
    if (ierr /= 0) call error_handling(1,trim(opt_stat_file),'RAYTRACING_INPUT (io.f90)')
 
    ! read format and file extensions
-   read(1,*); read(1,*); read(1,*); read(1,*); read(1,'(a90)') opt_dir
+   read(1,*); read(1,*); read(1,*); read(1,*); read(1,'(a256)') opt_dir
    read(1,*); read(1,*)
    read(1,*) hf_kind_flag
    read(1,*); read(1,*)
@@ -491,13 +491,13 @@ if (ext_flag == 1 .and. modality_flag /=0) then
    i = 0
    do plane = 1, plane_num
 
-       read(1,*) i_dum,ncell_tmp ! read data block e.g. POINTS, np
-       print*,'ncell_tmp', ncell_tmp
-       !loop over srf' # of points
-       do k = 1, ncell_tmp
-          i = i+1
-          read(1,*) x_cell(i),y_cell(i),z_cell(i)  !row-wise ordered file (i.e. along strike)
-       enddo
+      read(1,*) i_dum,ncell_tmp ! read data block e.g. POINTS, np
+      print*,'ncell_tmp', ncell_tmp
+      !loop over srf' # of points
+      do k = 1, ncell_tmp
+         i = i+1
+         read(1,*) x_cell(i),y_cell(i),z_cell(i)  !row-wise ordered file (i.e. along strike)
+      enddo
    enddo
 
    close(1)
@@ -1010,7 +1010,7 @@ character(len=2),intent(in)                   :: freq_flag
 ! local flag
 character(len=4)                              :: loc_flag
 ! local filenames
-character(len=90)                             :: name,name_bin
+character(len=256)                            :: name,name_bin
 ! local time-series
 real(kind=r_single),allocatable,dimension(:,:):: timeseries,tmp_timeseries
 ! local time-series length (seconds)
@@ -1020,7 +1020,7 @@ integer(kind=i_single)                        :: ts_npts
 ! local file extensions
 character(len=10)                             :: cp_x,cp_y,cp_z
 ! dummies and counters 
-character(len=90)                             :: x_name,y_name,z_name,loc_dir  
+character(len=256)                            :: x_name,y_name,z_name,loc_dir  
 integer(kind=i_single)                        :: k,j,remainder,read_nline
 integer(kind=i_single)                        :: pts_count,ierr,i,n,wts_npts
 real(kind=r_single)                           :: dummy,ts_dt,wts_len
@@ -1349,7 +1349,7 @@ character(len=*),intent(in)                  :: type_flag
 ! suffix of output file
 character(len=4)                             :: suffix
 ! output file name
-character(len=90)                            :: out_name
+character(len=256)                            :: out_name
 ! time-step and time values
 real(kind=r_single)                          :: dt,time
 ! counter
@@ -1393,7 +1393,7 @@ case default
    print*,'lf_len,npts,dt,v_npts,real_lf_len in write_dist=',lf_len,npts,dt,v_npts,real_lf_len
    !!!d_npts=v_npts/time_step  !!d_npts=npts/time_step
    tmp_dt = dt*time_step
-   d_npts = ceiling(real_lf_len/tmp_dt + 1)
+   d_npts = ceiling(real_lf_len/tmp_dt +1)
 end select
 
 ! binary output (only for broad-band)
@@ -1625,7 +1625,6 @@ implicit none
 integer(kind=i_single)                      :: i,j,k,ierr
 !-----------------------------------------------------------------------
 
-
 !! Read input K1 K2 K3, Cholesky factor of frequency correlation matrix, lower triangular matrix
 open(unit=3332,file=trim(corr_file_sp1),access='direct',form='unformatted', recl=4,status='old')
 read(3332,rec=1,iostat=ierr) nk
@@ -1640,19 +1639,40 @@ do j = 1,nk
 enddo
 close(unit=3332)
 
+do i=1,nk
+   do j=1,nk
+      if (Ksp1(i,j) /= Ksp1(i,j)) print*,'NaN found in Ksp1!'
+   enddo
+enddo
+
 if (.not.allocated(Ksp2)) allocate(Ksp2(nk,nk))
 open(unit=3333,file=trim(corr_file_sp2),access='direct',form='unformatted', recl=4*nk*nk,status='old')
 read(3333,rec=1,iostat=ierr) ((Ksp2(i,j), i=1,nk), j=1,nk)
 close(unit=3333)
+
+do i=1,nk
+   do j=1,nk
+      if (Ksp2(i,j) /= Ksp2(i,j)) print*,'NaN found in Ksp2!'
+   enddo
+enddo
 
 if (.not.allocated(Ksp3)) allocate(Ksp3(nk,nk))
 open(unit=3334,file=trim(corr_file_sp3),access='direct',form='unformatted', recl=4*nk*nk,status='old')
 read(3334,rec=1,iostat=ierr) ((Ksp3(i,j), i=1,nk), j=1,nk)
 close(unit=3334)
 
+do i=1,nk
+   do j=1,nk
+      if (Ksp3(i,j) /= Ksp3(i,j)) print*,'NaN found in Ksp3!'
+   enddo
+enddo
+
 print*,'Ksp1(200,1:5)', Ksp1(200,1:5)
 print*,'Ksp2(200,1:5)', Ksp2(200,1:5)
 print*,'Ksp3(200,1:5)', Ksp3(200,1:5)
+
+print*,'Done checking...'
+
 !!! Read input L1 L2, Cholesky factor of station correlation matrix, upper triangular matrix
 !if (.not.allocated(L1)) allocate(L1(n_stat,n_stat))
 !open(unit=3334,file='L1.bin',access='direct',form='unformatted', recl=4*n_stat*n_stat,status='old')
