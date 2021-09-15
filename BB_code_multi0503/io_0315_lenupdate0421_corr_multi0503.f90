@@ -1349,7 +1349,7 @@ character(len=*),intent(in)                  :: type_flag
 ! suffix of output file
 character(len=4)                             :: suffix
 ! output file name
-character(len=256)                            :: out_name
+character(len=256)                           :: out_name
 ! time-step and time values
 real(kind=r_single)                          :: dt,time
 ! counter
