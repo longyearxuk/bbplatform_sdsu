@@ -50,10 +50,15 @@ SUBROUTINE broadband_comp(station)
 !   Cahnge taper_len around P-wave arrival time from 10 to 30.
 !   Add call infcorr routine.
 !
+! Updated: November 2021 [kxu4143@sdsu.edu]
+!   Add 'hfs_seis' to save the scaled HF time series
+!   Add output-to-file option when flag_verbose == 'on'
+!
+use interfaces, only: write_disk	! add debug outputs
 use constants; use def_kind; use flags;
 use scattering, only: npts,time_step
 use source_receiver; use waveform; use fault_area;  use tmp_para
-use vel_model, only: tinit ! add v162
+use vel_model, only: tinit 		! add v162
 use matching, only: targ_fr
 
 implicit none
@@ -75,6 +80,7 @@ real(kind=r_single),allocatable,dimension(:,:) :: taper
 real(kind=r_single),allocatable,dimension(:)   :: convs_taper,bbs_taper
 ! for tapering and bb_seis
 real(kind=r_single),allocatable,dimension(:,:) :: tmp_seis
+real(kind=r_single),allocatable,dimension(:,:) :: hfs_seis
 !------------------------------------------------------------------------------------
 
 ! delta-t of both high and low-frequency (already interpolated) time-series   
@@ -116,11 +122,19 @@ if (merging_flag == 2) then
 
    bb_seis(1:npts,1:3)=0.0
 
+   ! added 'hfs_seis to output scaled HF time-series'
+   if (.not.allocated(hfs_seis)) allocate(hfs_seis(npts,3))
    do i=1,3
       do k=1,npts
-         bb_seis(k,i)=lf_int(k,i) + (conv_seis(k,i)*acc_ratio(i))
+         hfs_seis(k,i) = conv_seis(k,i)*acc_ratio(i)
+         bb_seis(k,i) = lf_int(k,i) + hfs_seis(k,i)
       enddo
    enddo
+
+   ! output scaled HF time-series if verbose
+   if (verbose_flag == 'on') then
+      call write_disk(station,'hfs',hfs_seis(:,:))
+   endif
 
 endif
 
@@ -207,6 +221,7 @@ if (modality_flag /= 0) then
    enddo
 
    if (allocated(tmp_seis)) deallocate(tmp_seis)
+   if (allocated(hfs_seis)) deallocate(hfs_seis)
 
    ! deallocate memory
    if (allocated(taper)) then
@@ -662,13 +677,13 @@ t_vsd_ave=vsd_ave*1.e5 ! [km/s] -> [cm/s]
 !endif
 !print*,'alt in composition.f90= ',alt
 
-!compute qk factor from G&P (2010) eq 15
+! compute qk factor from G&P (2010) eq 15
 if(.not.allocated(qk)) allocate(qk(n_lay))
 do i=1,n_lay
    qk(i)=afac+bfac*vs(i)
 enddo
 
-!rupture velocity, updated from G&P(2016)
+! rupture velocity, updated from G&P(2016)
 if (station == 1) then
     call random_seed(size=seed_size)
     if (.not.allocated(tmp_seed)) allocate(tmp_seed(seed_size))

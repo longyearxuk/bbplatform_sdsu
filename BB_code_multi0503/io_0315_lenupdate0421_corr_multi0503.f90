@@ -1331,7 +1331,10 @@ SUBROUTINE write_disk(station,type_flag,in_arr)
 !
 ! Updated: February 2019 (v2.0)
 !   Add to use v_npts for dt computation.
-
+!
+! Updated: November 2021 [kxu4143@sdsu.edu]
+!   Add format choice 'hfs' for scaled HF timeseries
+!
 !
 use def_kind; use flags; use io_file, only: output_dir
 use scattering, only: npts,time_step; use source_receiver, only: stat_name
@@ -1374,7 +1377,9 @@ case('hyb')
       suffix='.bin'
    else 
       suffix='.hyb'
-   endif     
+   endif
+case('hfs')
+   suffix='.hfs'     !hf time series before merging 
 case('ccd')
    suffix='.ccd'     !scatterogram after convolution
 case('ocd')
@@ -1390,7 +1395,7 @@ case('stf')
 case default
    !dt = lf_len/(npts-1)
    dt = lf_len/(v_npts-1)
-   print*,'lf_len,npts,dt,v_npts,real_lf_len in write_dist=',lf_len,npts,dt,v_npts,real_lf_len
+   print*,'lf_len,npts,dt,v_npts,real_lf_len in write_disk=',lf_len,npts,dt,v_npts,real_lf_len
    !!!d_npts=v_npts/time_step  !!d_npts=npts/time_step
    tmp_dt = dt*time_step
    d_npts = ceiling(real_lf_len/tmp_dt +1)
@@ -1423,13 +1428,14 @@ else
    out_name=trim(output_dir)//'/BB.'//trim(stat_name(station))//suffix
    
    open(1,file=trim(out_name),form='formatted',status='unknown')
- 
+
    ! write HEADERS (8 lines)
    write(1,102) '% -----------------------------------------------'
-
    select case(type_flag)
    case('hyb')
       write(1,102) '% synthetic broadband seismogram (Mai&Olsen 2008) '
+   case('hfs')
+      write(1,102) '% HF seismogram before merging (Mai&Olsen 2008) '
    case('ccd')
       write(1,102) '% scatterogram after convolution (Mai&Olsen 2008) '
    case('ocd')
@@ -1442,16 +1448,15 @@ else
    write(1,100) '% site: ',trim(stat_name(station))
    select case(type_flag)
    case default
-      ! write(1,101) '% NPTS, DT: ',npts,dt
       write(1,101) '% NPTS, DT: ',d_npts,tmp_dt
    case('stf')
       write(1,101) '% NPTS, DT: ',npts_stf,dt
    case('ocd')
       write(1,101) '% NPTS, DT: ',npts,dt
-      !!!write(1,101) '% NPTS, DT: ',d_npts,tmp_dt
+   case('hfs')
+      write(1,101) '% NPTS, DT: ',npts,dt
    case('ccd')
       write(1,101) '% NPTS, DT: ',npts,dt
-      !!!write(1,101) '% NPTS, DT: ',d_npts,tmp_dt
    end select
 
    write(1,104) '%'
