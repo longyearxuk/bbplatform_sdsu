@@ -1335,7 +1335,6 @@ SUBROUTINE write_disk(station,type_flag,in_arr)
 ! Updated: November 2021 [kxu4143@sdsu.edu]
 !   Add format choice 'hfs' to ouput scaled HF timeseries
 !
-!
 use def_kind; use flags; use io_file, only: output_dir
 use scattering, only: npts,time_step; use source_receiver, only: stat_name
 use stf_data, only: npts_stf,total; use waveform, only: lf_len,lf_npts,v_npts,real_lf_len

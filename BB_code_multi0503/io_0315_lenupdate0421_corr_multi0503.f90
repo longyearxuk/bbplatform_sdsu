@@ -1332,10 +1332,6 @@ SUBROUTINE write_disk(station,type_flag,in_arr)
 ! Updated: February 2019 (v2.0)
 !   Add to use v_npts for dt computation.
 !
-! Updated: November 2021 [kxu4143@sdsu.edu]
-!   Add format choice 'hfs' for scaled HF timeseries
-!
-!
 use def_kind; use flags; use io_file, only: output_dir
 use scattering, only: npts,time_step; use source_receiver, only: stat_name
 use stf_data, only: npts_stf,total; use waveform, only: lf_len,lf_npts,v_npts,real_lf_len
@@ -1378,8 +1374,6 @@ case('hyb')
    else 
       suffix='.hyb'
    endif
-case('hfs')
-   suffix='.hfs'     !hf time series before merging 
 case('ccd')
    suffix='.ccd'     !scatterogram after convolution
 case('ocd')
@@ -1434,8 +1428,6 @@ else
    select case(type_flag)
    case('hyb')
       write(1,102) '% synthetic broadband seismogram (Mai&Olsen 2008) '
-   case('hfs')
-      write(1,102) '% HF seismogram before merging (Mai&Olsen 2008) '
    case('ccd')
       write(1,102) '% scatterogram after convolution (Mai&Olsen 2008) '
    case('ocd')
@@ -1452,8 +1444,6 @@ else
    case('stf')
       write(1,101) '% NPTS, DT: ',npts_stf,dt
    case('ocd')
-      write(1,101) '% NPTS, DT: ',npts,dt
-   case('hfs')
       write(1,101) '% NPTS, DT: ',npts,dt
    case('ccd')
       write(1,101) '% NPTS, DT: ',npts,dt

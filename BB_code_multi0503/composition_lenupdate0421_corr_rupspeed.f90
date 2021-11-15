@@ -53,7 +53,7 @@ SUBROUTINE broadband_comp(station)
 use constants; use def_kind; use flags;
 use scattering, only: npts,time_step
 use source_receiver; use waveform; use fault_area;  use tmp_para
-use vel_model, only: tinit ! add v162
+use vel_model, only: tinit 		! add v162
 use matching, only: targ_fr
 
 implicit none
