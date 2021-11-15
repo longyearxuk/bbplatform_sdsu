@@ -121,7 +121,6 @@ if (merging_flag == 2) then
          bb_seis(k,i)=lf_int(k,i) + (conv_seis(k,i)*acc_ratio(i))
       enddo
    enddo
-
 endif
 
 
@@ -555,10 +554,6 @@ FUNCTION acc_spec(f,station)
 ! Updated: February 2019 (v2.0)
 !   Avoid theta = 0 for t_star computation for imerg=1 and imerg=2.
 !
-! Updated: July 2021 (kxu4143)
-!   Cancelled the rupture velocity change near surface (G&P 2010).
-!   (for imerg = 2 = multiple subfaults only)
-!
 use constants; use def_kind; use flags; use scattering
 use source_receiver; use waveform; use earthquake
 use fault_area
@@ -677,12 +672,10 @@ if (station == 1) then
     call random_seed(put=tmp_seed)
     call random_number(Vrup_ratio)
     Vrup_ratio = 0.725 + (0.825-0.725)*Vrup_ratio
-    ! Vrup_ratio = 0.85	! fixed Vrup_ratio for Ridgecrest-c test
 endif
 
 print*, 'Vrup_ratio', Vrup_ratio
 
-! use different v_rups for near-surface layers
 if (hyp_z > 5..and.hyp_z < 8.) then
    vr_sub1 = ((Vrup_ratio - 0.6*Vrup_ratio)/3*(hyp_z-5) + 0.6*Vrup_ratio)*vs_avef
 elseif (hyp_z <= 5.) then

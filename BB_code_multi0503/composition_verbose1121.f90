@@ -570,9 +570,10 @@ FUNCTION acc_spec(f,station)
 ! Updated: February 2019 (v2.0)
 !   Avoid theta = 0 for t_star computation for imerg=1 and imerg=2.
 !
-! Updated: July 2021 (kxu4143)
-!   Cancelled the rupture velocity change near surface (G&P 2010).
-!   (for imerg = 2 = multiple subfaults only)
+! Updated: November 2021 (kxu4143@sdsu.edu)
+!   Avoid theta = NaN if [fz] & [R_cell] too close,
+!   used fixed value for [theta] for this situation.
+!   (while site just above a subfault)
 !
 use constants; use def_kind; use flags; use scattering
 use source_receiver; use waveform; use earthquake
@@ -692,12 +693,10 @@ if (station == 1) then
     call random_seed(put=tmp_seed)
     call random_number(Vrup_ratio)
     Vrup_ratio = 0.725 + (0.825-0.725)*Vrup_ratio
-    ! Vrup_ratio = 0.85	! fixed Vrup_ratio for Ridgecrest-c test
 endif
 
 print*, 'Vrup_ratio', Vrup_ratio
 
-! use different v_rups for near-surface layers
 if (hyp_z > 5..and.hyp_z < 8.) then
    vr_sub1 = ((Vrup_ratio - 0.6*Vrup_ratio)/3*(hyp_z-5) + 0.6*Vrup_ratio)*vs_avef
 elseif (hyp_z <= 5.) then
@@ -794,6 +793,11 @@ do i=1,nsub
    
    ! angle between the surface and raypath from each subfault
    theta=asin(fz(i)/R_cell(i)*100000.)
+
+   ! avoid theta=NaN for numerical error fz>R_cell
+   if (fz(i)*100000 >= R_cell(i)) then
+      theta=asin(1.0)
+   endif
 
    do j=2, n_lay
       if (fz(i) > depth(j)) then
