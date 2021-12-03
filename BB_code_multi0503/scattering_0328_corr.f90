@@ -288,9 +288,8 @@ print*,'gs_flag= ',gs_flag
 ! str_fac section
 read(1,*) tmp_str_fac
 if  (tmp_str_fac == 0.0) then
-   !if (gs_flag == 1) then
    if (gs_flag == 1 .or. gs_flag == 3) then ! add for Japanese events
-       str_fac=50.e6
+      str_fac=50.e6
    elseif (gs_flag == 2) then
       str_fac=0.0
    endif

@@ -31,6 +31,10 @@ SUBROUTINE conv_stf_scat(station)
 !
 ! Updated: February 2019 (v2.0)
 !   No use tmp_para, but use v_npts.
+!
+! Updated: November 2021 (kxu4143@sdsu.edu)
+!   Canceled the use of convolution [convlv]
+!   This is not for simulation! only debug use!
 
 use constants; use def_kind; use flags
 use interfaces, only: convlv; use source_receiver
@@ -95,8 +99,7 @@ forall (i=1:taper_len,j=1:3)
    scattgram(npts-taper_len+i,j)=scattgram(npts-taper_len+i,j)*han_win(i)
 end forall
 
-!!! cancelled convolution for comparisons
-! perform convolution for each component
+! perform convolution for each component (cancelled!)
 do i=1,3
 !   conv_seis(:,i)=convlv(scattgram(:,i),stf_sum)*dt
    conv_seis(:,i)=scattgram(:,i)

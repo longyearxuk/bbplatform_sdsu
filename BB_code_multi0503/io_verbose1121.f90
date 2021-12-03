@@ -1334,6 +1334,7 @@ SUBROUTINE write_disk(station,type_flag,in_arr)
 !
 ! Updated: November 2021 [kxu4143@sdsu.edu]
 !   Add format choice 'hfs' to ouput scaled HF timeseries
+!   Changed 'ocd'/'ccd'/'hfs' dt to fix the incorrect outputs
 !
 use def_kind; use flags; use io_file, only: output_dir
 use scattering, only: npts,time_step; use source_receiver, only: stat_name
@@ -1470,10 +1471,11 @@ else
    ! write all the time-series into a single file
    select case(type_flag)
    case default
-     ! do i=1,npts
-     !    time = (i-1)*dt
-     !    write(1,200) time,in_arr(i,1),in_arr(i,2),in_arr(i,3)
-     ! enddo
+      do i=1,npts
+         time = (i-1)*dt
+         write(1,200) time,in_arr(i,1),in_arr(i,2),in_arr(i,3)
+      enddo
+   case('hyb')
       do i=1,d_npts
          time = (i-1)*tmp_dt
          write(1,200) time,in_arr(i,1),in_arr(i,2),in_arr(i,3)
